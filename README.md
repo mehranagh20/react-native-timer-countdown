@@ -38,7 +38,7 @@ render() {
 | interval | The time between timer ticks (in ms). | number | ✓ | 1000ms |
 | allowFontScaling | to allow font scaling | bool |  | false |
 | style | The custom styling which will be applied to the Text component | style |  |  |
-| formatFunc | A function that formats the secondsRemaining | func | | |
+| formatSecondsRemaining | A function that formats the secondsRemaining | func | | |
 | onTick | A function to call each tick | func | | |
 | onTimeElapsed | A function to call when the countdown completes | func |  | |
 

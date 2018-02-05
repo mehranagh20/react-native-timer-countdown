@@ -83,8 +83,8 @@ export default class TimerCountdown extends React.Component {
   }
 
   getFormattedTime(milliseconds) {
-    if (this.props.formatFunc) {
-      return this.props.formatFunc(milliseconds);
+    if (this.props.formatSecondsRemaining) {
+      return this.props.formatSecondsRemaining(milliseconds);
     }
 
     const totalSeconds = Math.round(milliseconds / 1000);
@@ -117,7 +117,7 @@ export default class TimerCountdown extends React.Component {
 
 TimerCountdown.defaultProps = {
   interval: 1000,
-  formatFunc: null,
+  formatSecondsRemaining: null,
   onTick: null,
   onTimeElapsed: null,
   allowFontScaling: false,
@@ -127,7 +127,7 @@ TimerCountdown.defaultProps = {
 TimerCountdown.propTypes = {
   initialSecondsRemaining: PropTypes.number.isRequired,
   interval: PropTypes.number,
-  formatFunc: PropTypes.func,
+  formatSecondsRemaining: PropTypes.func,
   onTick: PropTypes.func,
   onTimeElapsed: PropTypes.func,
   allowFontScaling: PropTypes.bool,
