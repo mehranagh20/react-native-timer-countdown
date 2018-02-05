@@ -135,5 +135,5 @@ TimerCountdown.propTypes = {
   onTick: PropTypes.func,
   onTimeElapsed: PropTypes.func,
   allowFontScaling: PropTypes.bool,
-  style: ViewPropTypes.style,
+  style: Text.propTypes.style,
 };
