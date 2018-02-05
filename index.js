@@ -82,10 +82,6 @@ export default class TimerCountdown extends React.Component {
     }
   }
 
-  restart() {
-    this.setState({ previousSeconds: null, secondsRemaining: this.props.initialSecondsRemaining });
-  }
-
   getFormattedTime(milliseconds) {
     if (this.props.formatFunc) {
       return this.props.formatFunc(milliseconds);
