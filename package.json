@@ -1,7 +1,7 @@
 {
   "name": "react-native-timer-countdown",
-  "version": "1.0.1",
-  "description": "A customizable countdown component for React Native",
+  "version": "1.0.2",
+  "description": "A simple customizable countdown component for React Native",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,7 +12,8 @@
   },
   "keywords": [
     "countdown",
-    "react-native"
+    "react-native",
+    "timer"
   ],
   "author": "avid21",
   "license": "MIT",
