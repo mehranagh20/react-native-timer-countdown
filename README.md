@@ -1,4 +1,6 @@
 [![npm version](https://badge.fury.io/js/react-native-timer-countdown.svg)](https://badge.fury.io/js/react-native-timer-countdown)
+[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://www.npmjs.com/package/react-native-timer-countdown)
+
 # React Native Timer Countdown
 A customizable countdown component for React Native (iOS and Android).
 
