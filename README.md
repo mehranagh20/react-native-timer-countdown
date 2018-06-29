@@ -1,10 +1,10 @@
 # React Native Timer Countdown
-A customizable countdown component for React Native.
+A customizable countdown component for React Native (iOS and Android).
 
 ## Install
 
 ```sh
-npm install --save react-native-timer-countdown`
+npm install --save react-native-timer-countdown
 ```
 
 or
@@ -16,13 +16,13 @@ yarn add react-native-timer-countdown
 ## Usage
 
 ```javascript
-import TimerCountdown from 'react-native-timer-countdown'
+import TimerCountdown from 'react-native-timer-countdown';
 
 render() {
     return (
         <TimerCountdown
-            initialSecondsRemaining={360}
-            onTick={() => console.log('tick')}
+            initialSecondsRemaining={1000*60}
+            onTick={secondsRemaining => console.log('tick', secondsRemaining)}
             onTimeElapsed={() => console.log('complete')}
             allowFontScaling={true}
             style={{ fontSize: 20 }}
@@ -39,12 +39,71 @@ render() {
 | allowFontScaling | to allow font scaling | bool |  | false |
 | style | The custom styling which will be applied to the Text component | style |  |  |
 | formatSecondsRemaining | A function that formats the secondsRemaining | func | | |
-| onTick | A function to call each tick | func | | |
+| onTick | A function to call each tick. It returns the remaining seconds. | func | | |
 | onTimeElapsed | A function to call when the countdown completes | func |  | |
 
-## Author
+## FAQ
+### Why does this timer restart whenever I click any button?
 
-Avid21
+#### What's happening
+buttons clicked -> state changes -> react rerenders -> timer restarts
+
+#### How to not to restart the timer component
+Provided the state changes only occur in component B, A component will not rerender. As a result, no more unintended timer restarts.
+
+```javascript
+import React, { Component } from 'react';
+import { StyleSheet, Button, View } from 'react-native';
+import TimerCountdown from 'react-native-timer-countdown';
+
+export default class A extends Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        <B />
+        <Timer />
+      </View>
+    );
+  }
+}
+
+class B extends Component {
+  state = { isPressed: false }
+  render() {
+    return (
+      <View styles={{ flex: 1 }}>
+        <Button
+          title={`${this.state.isPressed ? 'Button Pressed' : 'Button'}`}
+          onPress={() => { this.setState({ isPressed: true }) }}
+        />
+      </View >
+    )
+  }
+}
+
+const Timer = () => (
+  <TimerCountdown
+    initialSecondsRemaining={1000*60}
+    onTick={secondsRemaining => console.log('tick', secondsRemaining)}
+    onTimeElapsed={() => console.log('complete')}
+    allowFontScaling={true}
+    style={{ fontSize: 20 }}
+  />
+);
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+
+```
+
+## Author
+noelyoo
 
 ## License
 
