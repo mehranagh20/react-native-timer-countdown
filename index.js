@@ -1,135 +1,104 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Text, View, ViewPropTypes as RNViewPropTypes } from 'react-native';
-const ViewPropTypes = RNViewPropTypes || View.propTypes;
-
-/**
- * A customizable countdown component for React Native.
- *
- * @export
- * @class TimerCountdown
- * @extends {React.Component}
- */
-
-export default class TimerCountdown extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      secondsRemaining: this.props.initialSecondsRemaining,
-      timeoutId: null,
-      previousSeconds: null
-    };
-
-    this.mounted = false;
-
-    this.tick = this.tick.bind(this);
-    this.getFormattedTime = this.getFormattedTime.bind(this);
-  }
-
-  componentDidMount() {
-    this.mounted = true;
-    this.tick();
-  }
-
-  componentWillReceiveProps(newProps) {
-    if (this.state.timeoutId) { clearTimeout(this.state.timeoutId); }
-    this.setState({ previousSeconds: null, secondsRemaining: newProps.initialSecondsRemaining });
-  }
-
-  componentDidUpdate(nextProps, nextState) {
-    if ((!this.state.previousSeconds) && this.state.secondsRemaining > 0 && this.mounted) {
-      this.tick();
+"use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __importStar(require("react"));
+const react_native_1 = require("react-native");
+class TimerCountdown extends React.Component {
+    constructor() {
+        super(...arguments);
+        this.mounted = false;
+        this.state = {
+            secondsRemaining: this.props.initialSecondsRemaining,
+            timeoutId: null,
+            previousSeconds: null
+        };
+        this.tick = () => {
+            const currentSeconds = Date.now();
+            const dt = this.state.previousSeconds ? currentSeconds - this.state.previousSeconds : 0;
+            const interval = this.props.interval;
+            const intervalSecondsRemaing = interval - (dt % interval);
+            let timeout = intervalSecondsRemaing;
+            if (intervalSecondsRemaing < interval / 2.0) {
+                timeout += interval;
+            }
+            const secondsRemaining = Math.max(this.state.secondsRemaining - dt, 0);
+            const isComplete = this.state.previousSeconds && secondsRemaining <= 0;
+            if (this.mounted) {
+                if (this.state.timeoutId) {
+                    clearTimeout(this.state.timeoutId);
+                }
+                this.setState({
+                    timeoutId: isComplete ? null : setTimeout(this.tick, timeout),
+                    previousSeconds: currentSeconds,
+                    secondsRemaining
+                });
+            }
+            if (isComplete) {
+                if (this.props.onTimeElapsed) {
+                    this.props.onTimeElapsed();
+                }
+                return;
+            }
+            if (this.props.onTick) {
+                this.props.onTick(secondsRemaining);
+            }
+        };
+        this.getFormattedTime = (milliseconds) => {
+            if (this.props.formatSecondsRemaining) {
+                return this.props.formatSecondsRemaining(milliseconds);
+            }
+            const remainingSec = Math.round(milliseconds / 1000);
+            const seconds = parseInt((remainingSec % 60).toString(), 10);
+            const minutes = parseInt(((remainingSec / 60) % 60).toString(), 10);
+            const hours = parseInt((remainingSec / 3600).toString(), 10);
+            const s = seconds < 10 ? '0' + seconds : seconds;
+            const m = minutes < 10 ? '0' + minutes : minutes;
+            let h = hours < 10 ? '0' + hours : hours;
+            h = h === '00' ? '' : h + ':';
+            return h + m + ':' + s;
+        };
     }
-  }
-
-  componentWillUnmount() {
-    this.mounted = false;
-    clearTimeout(this.state.timeoutId);
-  }
-
-  tick() {
-    const currentSeconds = Date.now();
-    const dt = this.state.previousSeconds ? (currentSeconds - this.state.previousSeconds) : 0;
-    const interval = this.props.interval;
-
-    // correct for small variations in actual timeout time
-    const intervalSecondsRemaing = (interval - (dt % interval));
-    let timeout = intervalSecondsRemaing;
-
-    if (intervalSecondsRemaing < (interval / 2.0)) {
-      timeout += interval;
+    componentDidMount() {
+        this.mounted = true;
+        this.tick();
     }
-
-    const secondsRemaining = Math.max(this.state.secondsRemaining - dt, 0);
-    const isComplete = (this.state.previousSeconds && secondsRemaining <= 0);
-
-    if (this.mounted) {
-      if (this.state.timeoutId) { clearTimeout(this.state.timeoutId); }
-      this.setState({
-        timeoutId: isComplete ? null : setTimeout(this.tick, timeout),
-        previousSeconds: currentSeconds,
-        secondsRemaining: secondsRemaining
-      });
+    componentWillReceiveProps(newProps) {
+        if (this.state.timeoutId) {
+            clearTimeout(this.state.timeoutId);
+        }
+        this.setState({
+            previousSeconds: null,
+            secondsRemaining: newProps.initialSecondsRemaining
+        });
     }
-
-    if (isComplete) {
-      if (this.props.onTimeElapsed) { this.props.onTimeElapsed(); }
-      return;
+    componentDidUpdate() {
+        if (!this.state.previousSeconds && this.state.secondsRemaining > 0 && this.mounted) {
+            this.tick();
+        }
     }
-
-    if (this.props.onTick) {
-      this.props.onTick(secondsRemaining);
+    componentWillUnmount() {
+        this.mounted = false;
+        clearTimeout(this.state.timeoutId);
     }
-  }
-
-  getFormattedTime(milliseconds) {
-    if (this.props.formatSecondsRemaining) {
-      return this.props.formatSecondsRemaining(milliseconds);
-    }
-
-    const totalSeconds = Math.round(milliseconds / 1000);
-
-    let seconds = parseInt(totalSeconds % 60, 10);
-    let minutes = parseInt(totalSeconds / 60, 10) % 60;
-    let hours = parseInt(totalSeconds / 3600, 10);
-
-    seconds = seconds < 10 ? '0' + seconds : seconds;
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    hours = hours < 10 ? '0' + hours : hours;
-
-    hours = hours === '00' ? '' : hours + ':';
-
-    return hours + minutes + ':' + seconds;
-  }
-
-  render() {
-    const secondsRemaining = this.state.secondsRemaining;
-    return (
-      <Text
-        allowFontScaling={this.props.allowFontScaling}
-        style={this.props.style}
-      >
+    render() {
+        const secondsRemaining = this.state.secondsRemaining;
+        const allowFontScaling = this.props.allowFontScaling;
+        const style = this.props.style;
+        return (<react_native_1.Text allowFontScaling={allowFontScaling} style={style}>
         {this.getFormattedTime(secondsRemaining)}
-      </Text>
-    );
-  }
+      </react_native_1.Text>);
+    }
 }
-
 TimerCountdown.defaultProps = {
-  interval: 1000,
-  formatSecondsRemaining: null,
-  onTick: null,
-  onTimeElapsed: null,
-  allowFontScaling: false,
-  style: {}
+    interval: 1000,
+    formatSecondsRemaining: null,
+    onTick: null,
+    onTimeElapsed: null
 };
-
-TimerCountdown.propTypes = {
-  initialSecondsRemaining: PropTypes.number.isRequired,
-  interval: PropTypes.number,
-  formatSecondsRemaining: PropTypes.func,
-  onTick: PropTypes.func,
-  onTimeElapsed: PropTypes.func,
-  allowFontScaling: PropTypes.bool,
-  style: Text.propTypes.style,
-};
+exports.default = TimerCountdown;
