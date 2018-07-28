@@ -8,7 +8,7 @@
     "lint": "node_modules/.bin/tslint --project tsconfig.json --format stylish",
     "prettier": "prettier --write '**/*.{ts,tsx,js}' --config .prettierrc",
     "ci": "npm run type-check && npm run lint && npm run prettier",
-    "build": "npm run ci &&  babel src --out-dir ./ --extensions \".ts,.tsx\""    
+    "build": "npm run ci &&  babel src --out-dir ./ --extensions \".ts,.tsx\""
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,7 @@
     "@babel/plugin-proposal-class-properties": "^7.0.0-beta.49",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.49",
     "@babel/preset-env": "^7.0.0-beta.49",
+    "@babel/preset-react": "^7.0.0-beta.49",
     "@babel/preset-typescript": "^7.0.0-beta.49",
     "@types/node": "^10.5.2",
     "@types/react": "^16.0.5",

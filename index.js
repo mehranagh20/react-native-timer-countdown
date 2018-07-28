@@ -153,9 +153,10 @@ function (_React$Component) {
       var secondsRemaining = this.state.secondsRemaining;
       var allowFontScaling = this.props.allowFontScaling;
       var style = this.props.style;
-      return <_reactNative.Text allowFontScaling={allowFontScaling} style={style}>
-        {this.getFormattedTime(secondsRemaining)}
-      </_reactNative.Text>;
+      return React.createElement(_reactNative.Text, {
+        allowFontScaling: allowFontScaling,
+        style: style
+      }, this.getFormattedTime(secondsRemaining));
     }
   }]);
 
