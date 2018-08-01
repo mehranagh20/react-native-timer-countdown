@@ -1,12 +1,13 @@
 {
   "name": "react-native-timer-countdown",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A simple customizable countdown component for React Native",
   "main": "index.js",
   "scripts": {
     "lint": "tslint --project tsconfig.json --format stylish",
-    "ci": "npm run type-check && npm run lint",
-    "build": "npm run ci && tsc"
+    "ci": "npm run type-check && npm run lint && npm run prettier",
+    "build": "npm run ci && tsc",
+    "prettier": "prettier --write '**/*.{ts,tsx,js}' --config .prettierrc"
   },
   "repository": {
     "type": "git",
