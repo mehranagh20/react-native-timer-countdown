@@ -1,4 +1,4 @@
-/src
+index.tsx
 .github
 .edit
 .DS_STORE
@@ -13,8 +13,4 @@ npm-debug.log*
 README.md
 tsconfig.json
 tslint.json
-.babelrc
-
-package.json
-package-lock.json
 
